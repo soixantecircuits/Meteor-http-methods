@@ -565,7 +565,7 @@ WebApp.connectHandlers.use(function(req, res, next) {
         }
 
         // If OK / 200 then Return the result
-        if (self.statusCode === 200) {
+        if ((self.statusCode === 200) || (self.statusCode === 206))  {
           // Set headers
           _.each(self.headers, function(value, key) {
             // If value is defined then set the header, this allows for unsetting
@@ -581,6 +581,9 @@ WebApp.connectHandlers.use(function(req, res, next) {
 
           // Return result
           var resultBuffer = new Buffer(result);
+
+          //Set status code
+          res.writeHead(self.statusCode);
 
           // Check if user wants to overwrite content length for some reason?
           if (typeof self.headers['Content-Length'] === 'undefined') {
